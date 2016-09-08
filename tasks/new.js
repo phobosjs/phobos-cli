@@ -23,10 +23,14 @@ module.exports = function(_) {
 
       execute.on('exit', (code) => {
         if (code === 0) {
-          const pjson = require(`${_.directory}/${name}/package.json`);
-          pjson.name = name;
+          const pjsonPath = `${_.directory}/${name}/package.json`;
+          const pjson = require(pjsonPath);
 
-          fs.writeFile(`${_.directory}/package.json`, JSON.stringify(pjson, null, 2), (err) => {
+          pjson.name = name;
+          pjson.author = '';
+          pjson.description = 'A brand spanking new Phobos.js project';
+
+          fs.writeFile(pjsonPath, JSON.stringify(pjson, null, 2), (err) => {
             if (err) {
               _.error(err);
               _.info(`=> Unable to complete command due to error`);
