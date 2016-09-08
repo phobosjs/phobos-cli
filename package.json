@@ -1,6 +1,6 @@
 {
   "name": "phobos-cli",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A CLI to easily generate your Phobos.js app",
   "main": "index.js",
   "scripts": {
