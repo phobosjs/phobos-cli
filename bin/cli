@@ -1,0 +1,41 @@
+#!/usr/bin/env node
+
+'use strict';
+
+const prompt = require('commander');
+const glob = require('glob');
+const chalk = require('chalk');
+const exec = require('child_process').exec;
+
+const version = require('../package.json').version;
+
+prompt.version(version);
+
+const utils = {
+
+  info(message) {
+    console.log(chalk.cyan(message));
+  },
+
+  error(message) {
+    console.log(chalk.red(message));
+  },
+
+  warning(message) {
+    console.log(chalk.yellow(message));
+  },
+
+  shell(command, callback) {
+    return exec(command, callback);
+  },
+
+  directory: process.cwd()
+
+};
+
+for (const file of glob.sync(`${__dirname}/../tasks/*.js`)) {
+  const task = require(file)(utils);
+  prompt.command(task.name).description(task.desc).action(task.action);
+}
+
+prompt.parse(process.argv);
