@@ -25,8 +25,28 @@ const utils = {
     console.log(chalk.yellow(message));
   },
 
-  shell(command, callback) {
-    return exec(command, callback);
+  shell(command) {
+    const promise = new Promise((resolve, reject) => {
+      const proc = exec(command, (err, stdout, stderr) => {
+        if (err) {
+          this.error(`=> Could not complete command:`);
+          this.info(err);
+
+          return reject();
+        }
+      });
+
+      proc.on('exit', (code) => {
+        if (code !== 0) {
+          this.error(`=> Unable to complete command due to error`);
+          return reject();
+        }
+
+        return resolve();
+      });
+    });
+
+    return promise;
   },
 
   directory: process.cwd()
